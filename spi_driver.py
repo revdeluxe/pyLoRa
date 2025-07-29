@@ -32,3 +32,22 @@ class SPIDriver:
     def close(self):
         """Close SPI connection."""
         self.spi.close()
+
+if __name__ == "__main__":
+    # Example usage
+    spi_driver = SPIDriver()
+    try:
+        # Read a register
+        value = spi_driver.read_register(0x01)
+        print(f"Register 0x01: {value}")
+
+        # Write to a register
+        spi_driver.write_register(0x01, 0xFF)
+        print("Wrote 0xFF to register 0x01")
+
+        # Read multiple bytes
+        burst_data = spi_driver.read_burst(0x02, 5)
+        print(f"Burst data from 0x02: {burst_data}")
+
+    finally:
+        spi_driver.close()
