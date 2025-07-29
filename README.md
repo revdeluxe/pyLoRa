@@ -54,7 +54,7 @@ lora.send(data)
 ## 📥 3. **Receive a Packet**
 
 ```python
-if lora.received():
+if lora.receive():
     packet = lora.read()
     print("Received:", packet)
 ```
