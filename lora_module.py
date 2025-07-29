@@ -1,10 +1,10 @@
 # lora_module.py
 # High-level LoRa driver for SX127x (TX, RX, config)
 
-from registers import *
-from spi_driver import SPIDriver
-from lora_handler import LoRaGPIOHandler
-from pinout import Pinout
+from .registers import *
+from .spi_driver import SPIDriver
+from .lora_handler import LoRaGPIOHandler
+from .pinout import Pinout
 import time
 
 class LoRa:

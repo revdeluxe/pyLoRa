@@ -13,10 +13,10 @@ except ImportError as e:
     print(f"[❌] Missing required Python module: {e.name}")
     sys.exit(1)
 
-from spi_driver import SPIDriver
-from pinout import Pinout
-from LoRaHandler import LoRaGPIOHandler
-from registers import REG_VERSION
+from .spi_driver import SPIDriver
+from .pinout import Pinout
+from .lora_handler import LoRaGPIOHandler
+from .registers import REG_VERSION
 
 def check_spi():
     print("[🧪] Checking SPI interface...")
