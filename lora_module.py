@@ -16,6 +16,13 @@ class LoRa:
 
         self.init_radio()
 
+    def read(self):
+        """Read received data from the LoRa module."""
+        data = self.receive()
+        if data is None:
+            raise RuntimeError("No data received or timeout.")
+        return data
+
     def init_radio(self):
         """Initialize LoRa radio module."""
         self.gpio.reset()
