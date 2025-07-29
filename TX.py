@@ -8,13 +8,6 @@ def configure_lora():
     """
     Run preflight checks and configure LoRa module.
     """
-    print("🔧 Configuring LoRa module...")
-    if not check_spi():
-        print("[❌] SPI check failed. Please resolve issues and try again.")
-        return False
-    if not check_gpio():
-        print("[❌] GPIO check failed. Please resolve issues and try again.")
-        return False
     if not run_checks():
         print("[❌] System check failed. Please resolve issues and try again.")
         return False
@@ -22,8 +15,8 @@ def configure_lora():
     return True
 
 def main():
-    if not configure_lora():
-        return
+    configure_lora()
+
     lora = LoRa()
     lora.reset()               # Optional: HW reset using GPIO
     lora.set_frequency(433)    # MHz
