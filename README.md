@@ -24,7 +24,9 @@ your_project/
 from lora_driver import configure, lora_module
 
 # Run system checks
-configure.run_syscheck()
+configure.run_checks()
+configure.check_spi()
+configure.check_gpio()
 
 # Create LoRa object
 lora = lora_module.LoRa()
