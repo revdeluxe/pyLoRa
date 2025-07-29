@@ -91,6 +91,11 @@ class LoRa:
         data = self.spi.read_burst(REG_FIFO, received_count)
 
         return bytes(data)
+    
+    def reset(self):
+        """Reset the LoRa module using GPIO."""
+        self.gpio.reset()
+        time.sleep(0.1)
 
     def close(self):
         """Clean up SPI and GPIO."""
