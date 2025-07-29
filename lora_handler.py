@@ -19,6 +19,37 @@ class LoRaGPIOHandler:
         if 'DIO1' in self.pinout.pins:
             lgpio.gpio_claim_input(self.handle, self.pinout.pins['DIO1'])
 
+    def set_to_tx(self):
+        """Set GPIO pins to transmit mode."""
+        lgpio.gpio_write(self.handle, self.pinout.pins['RST'], 1)
+        lgpio.gpio_write(self.handle, self.pinout.pins['DIO0'], 0)
+    
+    def set_to_rx(self):
+        """Set GPIO pins to receive mode."""
+        lgpio.gpio_write(self.handle, self.pinout.pins['RST'], 0)
+        lgpio.gpio_write(self.handle, self.pinout.pins['DIO0'], 1)
+
+    def set_to_sleep(self):
+        """Set GPIO pins to sleep mode."""
+        lgpio.gpio_write(self.handle, self.pinout.pins['RST'], 0)
+        lgpio.gpio_write(self.handle, self.pinout.pins['DIO0'], 0)
+
+    def set_mode(self, mode):
+        """Set GPIO pins to a specific mode."""
+        if mode == 'TX':
+            self.set_to_tx()
+        elif mode == 'RX':
+            self.set_to_rx()
+        elif mode == 'SLEEP':
+            self.set_to_sleep()
+        else:
+            raise ValueError("Invalid mode. Use 'TX', 'RX', or 'SLEEP'.")
+
+    def set_to_idle(self):
+        """Set GPIO pins to idle mode."""
+        lgpio.gpio_write(self.handle, self.pinout.pins['RST'], 1)
+        lgpio.gpio_write(self.handle, self.pinout.pins['DIO0'], 1)
+
     def reset(self):
         """Resets the LoRa module by toggling the RST pin."""
         rst_pin = self.pinout.pins['RST']

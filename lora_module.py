@@ -36,11 +36,15 @@ class LoRa:
         self.set_tx_power(17)  # Max: 20 with PA_DAC tweak
         self.idle()
 
-    def sleep(self):
-        self.spi.write_register(REG_OP_MODE, MODE_SLEEP | MODE_LONG_RANGE_MODE)
-
     def idle(self):
+        """Set radio to idle mode."""
+        self.gpio.set_to_idle()
         self.spi.write_register(REG_OP_MODE, MODE_STDBY | MODE_LONG_RANGE_MODE)
+
+    def sleep(self):
+        """Set radio to sleep mode."""
+        self.gpio.set_to_sleep()
+        self.spi.write_register(REG_OP_MODE, MODE_SLEEP | MODE_LONG_RANGE_MODE)
 
     def set_frequency(self, freq_mhz):
         """Set frequency in MHz (e.g., 433.0, 868.0, 915.0)."""
@@ -49,11 +53,34 @@ class LoRa:
         self.spi.write_register(REG_FRF_MID, (frf >> 8) & 0xFF)
         self.spi.write_register(REG_FRF_LSB, frf & 0xFF)
 
-    def set_tx_power(self, level):
-        """Set transmit power in dBm (2–17 typical, up to 20)."""
-        if level < 2: level = 2
-        if level > 17: level = 17
-        self.spi.write_register(REG_PA_CONFIG, PA_BOOST | (level - 2))
+    def set_tx_power(self, power_dbm):
+        """Set TX power in dBm (0 to 20)."""
+        if power_dbm < 0 or power_dbm > 20:
+            raise ValueError("TX power must be between 0 and 20 dBm")
+        
+        pa_config = self.spi.read_register(REG_PA_CONFIG)
+        pa_config = (pa_config & 0xF0) | (power_dbm & 0x0F)
+        self.spi.write_register(REG_PA_CONFIG, pa_config)
+
+    def set_mode_rx(self):
+        """Set radio to receive mode."""
+        self.gpio.set_to_rx()
+        self.spi.write_register(REG_OP_MODE, MODE_RX_CONTINUOUS | MODE_LONG_RANGE_MODE)
+
+    def set_mode_tx(self):
+        """Set radio to transmit mode."""
+        self.gpio.set_to_tx()
+        self.spi.write_register(REG_OP_MODE, MODE_TX | MODE_LONG_RANGE_MODE)
+
+    def set_mode_sleep(self):
+        """Set radio to sleep mode."""
+        self.gpio.set_to_sleep()
+        self.spi.write_register(REG_OP_MODE, MODE_SLEEP | MODE_LONG_RANGE_MODE)
+
+    def set_mode_idle(self):
+        """Set radio to idle mode."""
+        self.gpio.set_to_idle()
+        self.spi.write_register(REG_OP_MODE, MODE_STDBY | MODE_LONG_RANGE_MODE)
 
     def send(self, data: bytes):
         """Send a bytes object over LoRa."""
