@@ -1,8 +1,8 @@
 # TX.py
 
-from .lora_module import LoRa
-from .lora_handler import LoRaGPIOHandler
-from .configure import run_checks, check_spi, check_gpio
+from lora_module import LoRa
+from lora_handler import LoRaGPIOHandler
+from configure import run_checks, check_spi, check_gpio
 
 def configure_lora():
     """
